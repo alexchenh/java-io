@@ -8,5 +8,5 @@ java-io最全代码示例
 
 ## 子模块：netty-io
 
-使用netty框架编写的Client、Server通信
+使用netty框架编写的Client、Server通信，同步IO多路复用模型
 
