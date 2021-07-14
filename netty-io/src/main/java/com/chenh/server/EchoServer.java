@@ -42,7 +42,8 @@ public class EchoServer {
                     .localAddress(new InetSocketAddress(port)) //使用指定的端口设置套接字地址
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast(echoServerHandler); //EchoServerHandler被标注为@Shareable，所以我们可以总是使用同样的实例
+                            socketChannel.pipeline().addLast(echoServerHandler); //EchoServerHandler被标注为@Shareable
+                            // ，所以我们可以总是使用同样的实例
                         }
                     }); //添加一个EchoServerHandler到子Channel的ChannelPipeline
 

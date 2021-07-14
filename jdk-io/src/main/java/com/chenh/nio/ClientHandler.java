@@ -13,7 +13,7 @@ import java.util.Set;
  * @author chenh
  * @date 2021年03月13日
  */
-public class  ClientHandler implements Runnable {
+public class ClientHandler implements Runnable {
 
     private SocketChannel socketChannel;
     private int port;
@@ -71,6 +71,7 @@ public class  ClientHandler implements Runnable {
             SocketChannel sc = (SocketChannel) key.channel();
             if (key.isConnectable()) {
                 if (sc.finishConnect()) {
+
                 } else {
                     System.exit(1);
                 }
@@ -102,7 +103,7 @@ public class  ClientHandler implements Runnable {
         }
     }
 
-    private void doWrite(SocketChannel socketChannel,String request)throws IOException {
+    private void doWrite(SocketChannel socketChannel, String request) throws IOException {
         byte[] bytes = request.getBytes();
         ByteBuffer writeBuff = ByteBuffer.allocate(bytes.length);
         writeBuff.put(bytes);
@@ -113,7 +114,7 @@ public class  ClientHandler implements Runnable {
         }
     }
 
-    public void sendMsg(String msg) throws Exception{
+    public void sendMsg(String msg) throws Exception {
         doWrite(socketChannel, msg);
     }
 }

@@ -20,13 +20,11 @@ public class Server {
     public static void main(String[] args) throws InterruptedException {
 
         // 运行服务端
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    Server.start();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        new Thread(() -> {
+            try {
+                Server.start();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }).start();
     }

@@ -19,27 +19,23 @@ public class Client {
 
     public static void main(String[] args) throws InterruptedException {
         // 运行客户端
-        new Thread(new Runnable() {
+        new Thread(() -> {
+            Client client = new Client();
+            while (true) {
 
-            @SuppressWarnings("resource")
-            public void run() {
-                Client client = new Client();
-                while (true) {
+                client.connect();//连接服务端
+                String scanner = new Scanner(System.in).nextLine();
 
-                    client.connect();//连接服务端
-                    String scanner = new Scanner(System.in).nextLine();
-
-                    if(!scanner.equals("q")) {
-                        client.send(scanner);//发送消息
-                    }else {
-
-                        client.close();
-                        break;
-                    }
+                if (!scanner.equals("q")) {
+                    client.send(scanner);//发送消息
+                } else {
 
                     client.close();
-
+                    break;
                 }
+
+                client.close();
+
             }
         }).start();
     }

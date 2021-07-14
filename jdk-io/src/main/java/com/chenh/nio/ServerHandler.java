@@ -22,18 +22,23 @@ public class ServerHandler implements Runnable {
     private boolean stop;
 
     /**
-     * 初始化多路复用器，绑定监听端口
+     * NIO服务端代码（新建连接）
      *
      * @param port
      */
     public ServerHandler(int port) {
         try {
-            selector = Selector.open();
+
+            //获取一个ServerSocket通道
             serverChannel = ServerSocketChannel.open();
             serverChannel.configureBlocking(false);
             serverChannel.socket().bind(new InetSocketAddress(port), 1024);
+            //获取通道管理器
+            selector = Selector.open();
+            //将通道管理器与通道绑定，并为该通道注册SelectionKey.OP_ACCEPT事件
             serverChannel.register(selector, SelectionKey.OP_ACCEPT);
             System.out.println("服务器监听" + port);
+
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
@@ -44,9 +49,14 @@ public class ServerHandler implements Runnable {
         this.stop = true;
     }
 
+    /**
+     * NIO服务端代码（监听）
+     */
     public void run() {
         while (!stop) {
             try {
+
+                //当有注册的事件到达时，方法返回，否则阻塞。
                 selector.select(1000);
                 Set<SelectionKey> selectionKeys = selector.selectedKeys();
                 Iterator<SelectionKey> it = selectionKeys.iterator();
@@ -80,18 +90,22 @@ public class ServerHandler implements Runnable {
 
     /**
      * 处理事件
+     *
      * @param key
      * @throws IOException
      */
     private void handleInput(SelectionKey key) throws IOException {
         if (key.isValid()) {
             if (key.isAcceptable()) {
+
                 ServerSocketChannel ssc = (ServerSocketChannel) key.channel();
                 SocketChannel sc = ssc.accept();
                 sc.configureBlocking(false);
+                //在与客户端连接成功后，为客户端通道注册SelectionKey.OP_READ事件。
                 sc.register(selector, SelectionKey.OP_READ);
+
             }
-            if (key.isReadable()) {
+            if (key.isReadable()) { //有可读数据事件
                 SocketChannel sc = (SocketChannel) key.channel();
                 ByteBuffer readBuff = ByteBuffer.allocate(1024);
                 //非阻塞的
@@ -115,6 +129,7 @@ public class ServerHandler implements Runnable {
 
     /**
      * 异步发送应答消息
+     *
      * @param sc
      * @param content
      * @throws IOException

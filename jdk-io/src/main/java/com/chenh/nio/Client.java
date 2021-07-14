@@ -20,26 +20,26 @@ public class Client {
         Client.start();
 
         try {
-            while (Client.sendMsg(new Scanner(System.in).nextLine()));
+            while (Client.sendMsg(new Scanner(System.in).nextLine())) ;
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 
-    public static void start(){
-        start(DEFAULT_HOST,DEFAULT_PORT);
+    public static void start() {
+        start(DEFAULT_HOST, DEFAULT_PORT);
     }
 
-    public static synchronized void start(String ip,int port){
+    public static synchronized void start(String ip, int port) {
 
-        clientHandler = new ClientHandler(ip,port);
-        new Thread(clientHandler,"Server").start();
+        clientHandler = new ClientHandler(ip, port);
+        new Thread(clientHandler, "Server").start();
 
     }
 
     //向服务器发送消息
-    public static boolean sendMsg(String msg) throws Exception{
+    public static boolean sendMsg(String msg) throws Exception {
         clientHandler.sendMsg(msg);
         return true;
 
